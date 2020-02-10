@@ -1,0 +1,82 @@
+#include "dietfeatures.h"
+
+.text
+.global _start
+_start:
+#ifdef WANT_CTOR
+	movq	%rdx, %rcx		/* %rcx = dynamic fini */
+#endif
+	popq	%rdi			/* %rdi = argc */
+	movq	%rsp,%rsi		/* %rsi = argv */
+	pushq	%rdi
+	
+	leaq	8(%rsi,%rdi,8),%rdx	/* %rdx = envp = (8*rdi)+%rsi+8 */
+
+#ifndef IN_LDSO
+#ifdef __PIC__
+	movq	environ@GOTPCREL(%rip), %rax
+	movq	%rdx, (%rax)
+#else
+	movq	%rdx, environ(%rip)
+	.hidden environ
+#endif
+
+#ifdef PROFILING
+	pushq	%rdi			/* save reg args */
+	pushq	%rsi
+	pushq	%rdx
+	pushq	%rcx
+
+	leaq	_etext(%rip), %rsi	/* highpc */
+	leaq	 .text(%rip), %rdi	/* lowpc */
+	call	monitor
+
+	popq	%rcx			/* restore reg args */
+	popq	%rdx
+	popq	%rsi
+	popq	%rdi
+#endif
+
+#ifdef __PIE__
+	call	CALL_IN_STARTCODE_PIE
+	.hidden CALL_IN_STARTCODE_PIE
+#else
+	call	CALL_IN_STARTCODE
+	.hidden CALL_IN_STARTCODE
+#endif
+
+#ifdef PROFILING
+	pushq	%rax
+	call	_stop_monitor
+	popq	%rdi
+#else
+	movq	%rax, %rdi	/* return value */
+#endif
+
+#else
+	call	main
+	.hidden main
+#endif
+
+#if defined(__ILP32__)
+	mov	$SYS_exit,%eax
+	syscall
+#else
+	call	exit
+#endif
+	hlt
+.Lstart:
+	.size	 _start,.Lstart-_start
+	.section	.note.GNU-stack,"",@progbits
+
+.section .init_array,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .fini_array,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

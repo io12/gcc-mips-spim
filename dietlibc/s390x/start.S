@@ -1,0 +1,52 @@
+#include "dietfeatures.h"
+
+.text
+.global _start
+_start:
+#ifdef WANT_CTOR
+	lgr	%r5,%r14		/* save dynamic ld.so _fini */
+#endif
+	lg	%r2,0(%r15)		/* argc */
+	la	%r3,8(%r15)		/* argv */
+
+/* envp = argv + ( (argc+1)*8 ) */
+	lgr	%r4,%r2
+	sll	%r4,3
+	la	%r4,16(%r4,%r15)
+
+/* align the stack to a double word boundary */
+	lghi	%r0,-16
+	ngr	%r15,%r0
+
+/* Setup a stack frame and a parameter area */
+	aghi	%r15,-176               /* make room on stack */
+	xc	0(8,%r15),0(%r15)       /* clear back-chain */
+
+/* environ = envp */
+	larl	%r13,environ
+	stg	%r4,0(%r13)
+
+/* call main or _dyn_start */
+	brasl	%r14,CALL_IN_STARTCODE
+
+/* call exit */
+	brasl	%r14,exit
+
+/* DIE! */
+        .word   0
+
+.align 4
+.Lstart:
+        .size   _start,.Lstart-_start
+
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

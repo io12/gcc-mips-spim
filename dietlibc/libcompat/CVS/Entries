@@ -1,0 +1,26 @@
+/clearenv.c/1.1/Mon Aug 29 13:12:10 2005//
+/ctermid.c/1.1/Sat Mar 15 02:36:42 2003//
+/cuserid.c/1.3/Sat Apr 11 04:32:45 2015//
+/daemon.c/1.1/Thu Feb 28 16:13:20 2002//
+/err.c/1.2/Tue Mar 15 08:51:22 2005//
+/errx.c/1.2/Tue Mar 15 08:51:22 2005//
+/ffsl.c/1.3/Tue Mar 15 08:51:22 2005//
+/ffsll.c/1.2/Sat Aug 23 16:25:06 2003//
+/ftok.c/1.1/Sat Mar 15 02:36:42 2003//
+/getdelim.c/1.3/Mon Dec 18 21:28:47 2006//
+/getline.c/1.3/Mon Dec 18 21:28:47 2006//
+/getutmp.c/1.1/Sat Feb 23 00:09:54 2008//
+/mempcpy.c/1.3/Fri May 25 00:21:24 2012//
+/rcmd.c/1.3/Fri Feb 21 10:03:29 2014//
+/re_bsd.c/1.2/Thu Apr  4 20:27:25 2002//
+/syscall.S/1.12/Tue Apr  4 03:42:48 2006//
+/toascii.c/1.1/Wed Jul 13 07:31:41 2005//
+/utmpxname.c/1.1/Sat Feb 23 00:09:54 2008//
+/verr.c/1.2/Tue Mar 15 08:51:23 2005//
+/verrx.c/1.2/Tue Mar 15 08:51:23 2005//
+/vwarn.c/1.2/Thu Jun 19 10:40:48 2003//
+/vwarnx.c/1.1/Fri Jun 13 18:27:07 2003//
+/warn.c/1.1/Fri Jun 13 18:41:41 2003//
+/warnx.c/1.1/Fri Jun 13 18:27:07 2003//
+/wtxent.c/1.1/Sat Feb 23 00:09:54 2008//
+D
